@@ -13,6 +13,7 @@ import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
 import com.amazonaws.HttpMethod;
+import com.amazonaws.auth.DefaultAWSCredentialsProviderChain;
 import com.amazonaws.auth.profile.ProfileCredentialsProvider;
 import com.amazonaws.regions.Regions;
 import com.amazonaws.services.lambda.runtime.Context;
@@ -27,9 +28,9 @@ import com.amazonaws.services.s3.model.GeneratePresignedUrlRequest;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
 
-public class GetPresigneUrlHandler implements RequestHandler<APIGatewayProxyRequestEvent, ApiGatewayResponse> {
+public class GetPresignedUrlHandler implements RequestHandler<APIGatewayProxyRequestEvent, ApiGatewayResponse> {
 
-	private static final Logger LOG = LogManager.getLogger(GetPresigneUrlHandler.class);
+	private static final Logger LOG = LogManager.getLogger(GetPresignedUrlHandler.class);
 
 
 
@@ -82,7 +83,7 @@ public class GetPresigneUrlHandler implements RequestHandler<APIGatewayProxyRequ
 		Regions clientRegion = Regions.DEFAULT_REGION;
 		AmazonS3 s3Client = AmazonS3ClientBuilder.standard()
                     .withRegion(clientRegion)
-                    .withCredentials(new ProfileCredentialsProvider())
+                    .withCredentials(DefaultAWSCredentialsProviderChain.getInstance())
                     .build();
 
             // Set the presigned URL to expire after one hour.
@@ -92,9 +93,11 @@ public class GetPresigneUrlHandler implements RequestHandler<APIGatewayProxyRequ
             expiration.setTime(expTimeMillis);
 
             // Generate the presigned URL.
+
+		    String FOLLOWS_TABLE_NAME = System.getenv("IMAGES_S3_BUCKET");
             System.out.println("Generating pre-signed URL.");
-            String bucketName = "";
-			String objectKey =  "";
+            String bucketName = FOLLOWS_TABLE_NAME;
+			String objectKey =  "ABC";
 			GeneratePresignedUrlRequest generatePresignedUrlRequest =
                     new GeneratePresignedUrlRequest(bucketName, objectKey)
                             .withMethod(HttpMethod.GET)
@@ -105,7 +108,7 @@ public class GetPresigneUrlHandler implements RequestHandler<APIGatewayProxyRequ
 
 	
 
-		Object responseBody = null;
+		Object responseBody = url;
 		// List<Post> feeds = dataLayer.getLatestPostsFromUsersFollowed(user);
 		// GetFeedResponse responseBody = new GetFeedResponse(feeds);
 		return ApiGatewayResponse.builder()

@@ -99,7 +99,7 @@ package:
 functions:
 
   auth:
-    handler: com.myfeeds.AuthHanlder
+    handler: com.myfeeds.AuthHandler
 
 
   follow:
@@ -136,7 +136,7 @@ functions:
 
     
   getpresigned: 
-    handler: com.myfeeds.GetPresignedUrlhHandler
+    handler: com.myfeeds.GetPresignedUrlHandler
     events:
       - http:
           path: /getpresignedurl

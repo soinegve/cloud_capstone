@@ -6,13 +6,19 @@ import java.util.Map;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
+import com.amazonaws.auth.policy.Action;
+import com.amazonaws.auth.policy.Policy;
+import com.amazonaws.auth.policy.Principal;
+import com.amazonaws.auth.policy.Resource;
+import com.amazonaws.auth.policy.Statement;
+import com.amazonaws.auth.policy.Statement.Effect;
 import com.amazonaws.services.lambda.runtime.Context;
 import com.amazonaws.services.lambda.runtime.RequestHandler;
 import com.myfeeds.dynamodb.DataLayerIfc;
 import com.myfeeds.dynamodb.DynamoDbUtil;
 
 
-public class AuthHandler implements RequestHandler<Map<String, Object>, ApiGatewayResponse> {
+public class AuthHandler implements RequestHandler<Map<String, Object>, AuthPolicy> {
 
 	private static final Logger LOG = LogManager.getLogger(FollowHandler.class);
 
@@ -21,7 +27,7 @@ public class AuthHandler implements RequestHandler<Map<String, Object>, ApiGatew
 
 
 	@Override
-	public ApiGatewayResponse handleRequest(Map<String, Object> input, Context context) {
+	public AuthPolicy handleRequest(Map<String, Object> input, Context context) {
 		LOG.info("received: {}", input);
 
 		
@@ -49,12 +55,43 @@ public class AuthHandler implements RequestHandler<Map<String, Object>, ApiGatew
 	
 		// String message = shouldFollow ? "User succesfully followed" : "User succesfully unfollowed"; 
 
-		String message = "all good";
-		Response responseBody = new Response(message, input);
-		return ApiGatewayResponse.builder()
-				.setStatusCode(200)
-				.setObjectBody(responseBody)
-				.setHeaders(Collections.singletonMap("X-Powered-By", "AWS Lambda & serverless"))
-				.build();
+		// String message = "all good";
+		// Response responseBody = new Response(message, input);
+		// return ApiGatewayResponse.builder()
+		// 		.setStatusCode(200)
+		// 		.setObjectBody(responseBody)
+		// 		.setHeaders(Collections.singletonMap("X-Powered-By", "AWS Lambda & serverless"))
+		// 		.build();
+
+
+	// 	Policy policy = new Policy("MyQueuePolicy");
+
+	// 	String principalId = "BAL";
+	// 	policy.withStatements(new Statement(Effect.Allow)
+    //    .withPrincipals(new Principal(principalId))
+    //    .withActions(new ExecuteApiInvoke())
+    //    .withResources(new Resource("*")));
+
+	//    return policy;
+
+
+				String principalId = "";
+				String region = "";
+				String awsAccountId = "";
+				String restApiId = "";
+				String stage = "";
+				return new AuthPolicy(principalId, AuthPolicy.PolicyDocument.getAllowAllPolicy(region, awsAccountId, restApiId, stage));
+	}
+
+
+	public class ExecuteApiInvoke implements Action{
+
+		@Override
+		public String getActionName() {
+			// TODO Auto-generated method stub
+			return "execute-api:Invoke";
+		}
+
+
 	}
 }
