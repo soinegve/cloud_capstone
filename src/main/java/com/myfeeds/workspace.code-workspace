@@ -1,0 +1,16 @@
+{
+	"folders": [
+		{
+			"path": "../../../../../../../../microservices/nd9990-c3-microservices-exercises-1"
+		},
+		{
+			"path": "../../../../../../../cloud-developer/course-04/project"
+		},
+		{
+			"path": "../../../../../.."
+		}
+	],
+	"settings": {
+		"java.configuration.updateBuildConfiguration": "automatic"
+	}
+}

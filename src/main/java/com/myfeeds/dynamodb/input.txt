@@ -1,0 +1,24 @@
+BRAND	Code	Size	Description	Price	ITEMS
+Earth	BK2	L	ζακέτα	15.22	1
+Goubi	S71	L,XL	πουλόβερ	20.8	2
+Goubi	S75	S,XL,XXL	μπεζ πουλόβερ	21.6	3
+Goubi	S44	S,M	ζακέτα	10.34	2
+ElisGeo	WSE23	one size	μπλούζα	10.4	1
+Earth	FU3	XXL	ζακετακι	8.2	1
+Goubi	C21	L,XL,XXL	AGATE	22.93	3
+Goubi	C21	L,XXL,XXL	BEIGE	22.93	3
+Goubi	C15	XL,XL,XXL	blue 	22.49	3
+Earth	FU38	M,L,XL	ζακέτα	13.74	3
+Αnastasia	NEF+ORCH	ONE SIZE	τζιν βαμβακερό	48.5	2
+Goubi	S24	M/L,M/L,M/L	ζακέτα γαλαζια	27.09	3
+Earth	FU52	S,S,M,L		10.8	4
+Εarth	CL16	M,L,L,XL,XXL	μοβ αμάνικο	4.69	5
+Εarth	FU87	S/M,S/M,M/L,XL/XXL,XL/XXL	ζαχαρί μπλούζα	18.54	5
+Earth	CL36	M	μπλούζα	16.94	1
+ElisGeo	CMO11ECY	S,S,L,L	πουκάμισο	13.99	4
+Earth	PC48	L,XL	ριγε μπλούζα	17.61	2
+Εarth	FU72	S,L,XL,XXL	φόρεμα μαύρο με γιακά	16.04	5
+Earth	FU69	M,L,XL	λευκή μπλούζα	13.34	3
+Goubi	C25	S/M,S/M,M/L,M/L,XL/XXL	μπλε περίεργη ασυμμετρη	22.49	5
+Earth	FU97	M,L,L,XL	μάυρη παντελόνα	23.22	4
+Earth	FU97	M,L,XL	μπλε παντελόνα	23.22	3
