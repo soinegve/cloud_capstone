@@ -1,0 +1,10 @@
+/.serverless/*
+/node_modules/*
+/target/*
+.classpath
+.DS_Store
+.npmignore
+.factorypath
+package-lock.json
+.project
+org*
