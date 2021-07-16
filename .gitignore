@@ -5,6 +5,7 @@
 .DS_Store
 .npmignore
 .factorypath
+/.settings
 package-lock.json
 .project
 org*.DS_Store
