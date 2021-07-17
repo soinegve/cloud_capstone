@@ -39,7 +39,6 @@ public class PublishHandler implements RequestHandler<APIGatewayProxyRequestEven
 		try {
 			postRequest = new ObjectMapper().readValue(body, PostRequest.class);
 		} catch (IOException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 			throw new RuntimeException("Not able to parse request");
 		}  
@@ -50,7 +49,8 @@ public class PublishHandler implements RequestHandler<APIGatewayProxyRequestEven
 		String text = postRequest.getContent();   
         String imageUrl = postRequest.getImageUrl();
 
-        String userId = "Karolos";
+        String userId =  AuthUtils.extractUserFromToken(event.getHeaders().get("Authorization"));
+        
 
         String postId = UUID.randomUUID().toString();
 

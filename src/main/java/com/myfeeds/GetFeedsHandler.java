@@ -31,27 +31,8 @@ public class GetFeedsHandler implements RequestHandler<APIGatewayProxyRequestEve
 
 
 
-
-		
-
-		
-		// if( !input.containsKey(userToFollowTokenName))
-		//    throw new RuntimeException("Missing mandatory value userToFollow");
-
-		// if( !input.containsKey(shouldFollowTokenName))
-		//    throw new RuntimeException("Missing mandatory value shouldFollow");
-
-
-
-		String user = "Karolos";
-
+		String user = AuthUtils.extractUserFromToken(event.getHeaders().get("Authorization"));
 		DataLayerIfc dataLayer = new DynamoDbUtil();
-
-	
-
-
-	
-
 		List<Post> feeds = dataLayer.getLatestPostsFromUsersFollowed(user);
 		GetFeedResponse responseBody = new GetFeedResponse(feeds);
 		return ApiGatewayResponse.builder()

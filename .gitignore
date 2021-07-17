@@ -9,3 +9,5 @@
 package-lock.json
 .project
 org*.DS_Store
+src/main/java/com/myfeeds/TokenVerifier.java
+src/data.json

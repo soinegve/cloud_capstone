@@ -1,97 +1,58 @@
 package com.myfeeds;
 
-import java.util.Collections;
 import java.util.Map;
+
 
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
-import com.amazonaws.auth.policy.Action;
-import com.amazonaws.auth.policy.Policy;
-import com.amazonaws.auth.policy.Principal;
-import com.amazonaws.auth.policy.Resource;
-import com.amazonaws.auth.policy.Statement;
-import com.amazonaws.auth.policy.Statement.Effect;
 import com.amazonaws.services.lambda.runtime.Context;
 import com.amazonaws.services.lambda.runtime.RequestHandler;
-import com.myfeeds.dynamodb.DataLayerIfc;
-import com.myfeeds.dynamodb.DynamoDbUtil;
+import com.auth0.jwk.Jwk;
+import com.auth0.jwk.JwkException;
+import com.auth0.jwk.JwkProvider;
+import com.auth0.jwk.UrlJwkProvider;
+import com.auth0.jwt.JWT;
+import com.auth0.jwt.exceptions.JWTDecodeException;
+import com.auth0.jwt.interfaces.DecodedJWT;
+
 
 
 public class AuthHandler implements RequestHandler<Map<String, Object>, AuthPolicy> {
 
 	private static final Logger LOG = LogManager.getLogger(FollowHandler.class);
 
-	private static final String userToFollowTokenName = "userToFollow";
-	private static final String shouldFollowTokenName = "shouldFollow";
+
 
 
 	@Override
 	public AuthPolicy handleRequest(Map<String, Object> input, Context context) {
 		LOG.info("received: {}", input);
 
-		
-		// if ( true)
-		// 		throw new RuntimeException("Noy authorised");
-		// if( !input.containsKey(userToFollowTokenName))
-		//    throw new RuntimeException("Missing mandatory value userToFollow");
-
-		// if( !input.containsKey(shouldFollowTokenName))
-		//    throw new RuntimeException("Missing mandatory value shouldFollow");
+		String token  = input.get("authorizationToken").toString();
 
 
-		// boolean shouldFollow = Boolean.parseBoolean(input.get(shouldFollowTokenName).toString());   
+		token = AuthUtils.extractToken(token);
+        final JwkProvider jwkProvider = new UrlJwkProvider("https://dev-6co6-fbx.us.auth0.com");
 
-		// String fromUser = "";
-		// String toUser = input.get(userToFollowTokenName).toString();
+        try {
+            DecodedJWT jwt = JWT.decode(token);
 
-		// DataLayerIfc dataLayer = new DynamoDbUtil();
-
-		// if(shouldFollow)
-		// 	dataLayer.follow(fromUser,toUser);
-		// else	
-		// 	dataLayer.unfollow(fromUser,toUser);
-
-	
-		// String message = shouldFollow ? "User succesfully followed" : "User succesfully unfollowed"; 
-
-		// String message = "all good";
-		// Response responseBody = new Response(message, input);
-		// return ApiGatewayResponse.builder()
-		// 		.setStatusCode(200)
-		// 		.setObjectBody(responseBody)
-		// 		.setHeaders(Collections.singletonMap("X-Powered-By", "AWS Lambda & serverless"))
-		// 		.build();
-
-
-	// 	Policy policy = new Policy("MyQueuePolicy");
-
-	// 	String principalId = "BAL";
-	// 	policy.withStatements(new Statement(Effect.Allow)
-    //    .withPrincipals(new Principal(principalId))
-    //    .withActions(new ExecuteApiInvoke())
-    //    .withResources(new Resource("*")));
-
-	//    return policy;
-
-
-				String principalId = "";
-				String region = "";
-				String awsAccountId = "";
-				String restApiId = "";
-				String stage = "";
-				return new AuthPolicy(principalId, AuthPolicy.PolicyDocument.getAllowAllPolicy(region, awsAccountId, restApiId, stage));
-	}
-
-
-	public class ExecuteApiInvoke implements Action{
-
-		@Override
-		public String getActionName() {
-			// TODO Auto-generated method stub
-			return "execute-api:Invoke";
+            Jwk boom = jwkProvider.get(jwt.getKeyId());
+          
+        } catch (JWTDecodeException exception){
+			throw new RuntimeException("JWTDecodeException");
+        } catch (JwkException e) {
+			throw new RuntimeException("JwkException");
 		}
-
-
+		
+		String principalId = "";
+		String region = "";
+		String awsAccountId = "";
+		String restApiId = "";
+		String stage = "";
+		return new AuthPolicy(principalId, AuthPolicy.PolicyDocument.getAllowAllPolicy(region, awsAccountId, restApiId, stage));
 	}
+
+
 }

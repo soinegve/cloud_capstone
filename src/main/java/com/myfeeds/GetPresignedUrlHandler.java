@@ -6,6 +6,7 @@ import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.UUID;
 
 import javax.print.DocFlavor.URL;
 
@@ -39,48 +40,9 @@ public class GetPresignedUrlHandler implements RequestHandler<APIGatewayProxyReq
 		LOG.info("received: {}", event);
 
 
+		String user = AuthUtils.extractUserFromToken(event.getHeaders().get("Authorization"));
 
-// This is usually done at application startup, because creating a presigner can be expensive.
-		// S3Presigner presigner = S3Presigner.create();
-
-		// // Create a GetObjectRequest to be pre-signed
-		// GetObjectRequest getObjectRequest =
-		// 		GetObjectRequest.builder()
-		// 						.bucket("my-bucket")
-		// 						.key("my-key")
-		// 						.build();
-
-		// // Create a GetObjectPresignRequest to specify the signature duration
-		// GetObjectPresignRequest getObjectPresignRequest =
-		// 	GetObjectPresignRequest.builder()
-		// 						.signatureDuration(Duration.ofMinutes(10))
-		// 						.getObjectRequest(getObjectRequest)
-		// 						.build();
-
-		// // Generate the presigned request
-		// PresignedGetObjectRequest presignedGetObjectRequest =
-		// 	presigner.presignGetObject(getObjectPresignRequest);
-
-		// Log the presigned URL, for example.
-		// System.out.println("Presigned URL: " + presignedGetObjectRequest.url());
-
-
-		
-
-		
-		// if( !input.containsKey(userToFollowTokenName))
-		//    throw new RuntimeException("Missing mandatory value userToFollow");
-
-		// if( !input.containsKey(shouldFollowTokenName))
-		//    throw new RuntimeException("Missing mandatory value shouldFollow");
-
-
-
-		String user = "Karolos";
-
-
-
-		Regions clientRegion = Regions.DEFAULT_REGION;
+		Regions clientRegion = Regions.US_EAST_1;
 		AmazonS3 s3Client = AmazonS3ClientBuilder.standard()
                     .withRegion(clientRegion)
                     .withCredentials(DefaultAWSCredentialsProviderChain.getInstance())
@@ -97,10 +59,10 @@ public class GetPresignedUrlHandler implements RequestHandler<APIGatewayProxyReq
 		    String FOLLOWS_TABLE_NAME = System.getenv("IMAGES_S3_BUCKET");
             System.out.println("Generating pre-signed URL.");
             String bucketName = FOLLOWS_TABLE_NAME;
-			String objectKey =  "ABC";
+			String objectKey =  UUID.randomUUID().toString();
 			GeneratePresignedUrlRequest generatePresignedUrlRequest =
                     new GeneratePresignedUrlRequest(bucketName, objectKey)
-                            .withMethod(HttpMethod.GET)
+                            .withMethod(HttpMethod.PUT)
                             .withExpiration(expiration);
             java.net.URL url = s3Client.generatePresignedUrl(generatePresignedUrlRequest);
 	
@@ -109,8 +71,6 @@ public class GetPresignedUrlHandler implements RequestHandler<APIGatewayProxyReq
 	
 
 		Object responseBody = url;
-		// List<Post> feeds = dataLayer.getLatestPostsFromUsersFollowed(user);
-		// GetFeedResponse responseBody = new GetFeedResponse(feeds);
 		return ApiGatewayResponse.builder()
 				.setStatusCode(200)
 				.setObjectBody(responseBody)

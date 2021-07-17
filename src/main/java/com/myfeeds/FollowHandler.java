@@ -14,7 +14,6 @@ import com.myfeeds.dynamodb.DataLayerIfc;
 import com.myfeeds.dynamodb.DynamoDbUtil;
 
 import com.amazonaws.services.lambda.runtime.events.APIGatewayProxyRequestEvent;
-import com.amazonaws.services.lambda.runtime.events.APIGatewayProxyResponseEvent;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
 
@@ -36,22 +35,14 @@ public class FollowHandler implements RequestHandler<APIGatewayProxyRequestEvent
 		try {
 			followRequest = new ObjectMapper().readValue(body, FollowRequest.class);
 		} catch (IOException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 			throw new RuntimeException("Not able to parse request");
 		}  
 
 		
-		// if( !input.containsKey(userToFollowTokenName))
-		//    throw new RuntimeException("Missing mandatory value userToFollow");
-
-		// if( !input.containsKey(shouldFollowTokenName))
-		//    throw new RuntimeException("Missing mandatory value shouldFollow");
-
-
 		boolean shouldFollow = followRequest.getFollowOrUnfollow();;   
 
-		String fromUser = "Karolos";
+		String fromUser = AuthUtils.extractUserFromToken(event.getHeaders().get("Authorization"));
 		String toUser = followRequest.getUserToFollow();
 
 		DataLayerIfc dataLayer = new DynamoDbUtil();
